@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>SOAP JavaScript Client Test</title>
+    <script type="text/javascript">
+        function soap() {
+	alert('We are here!');
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST', 'https://webservices.chargepoint.com/webservices/chargepoint/services/4.1', true);
+ 
+            user = "b207195d0b1684270db5aeae7970408c5179ce9f5a4dc1366937247";
+            pass = "d1cfc4704ae36aa87f732993daa5d983";
+
+ 
+            // build SOAP request
+            var sr = '<?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Header><wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" soap:mustUnderstand="1"><wsse:UsernameToken xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="UsernameToken-261"><wsse:Username>' + user + '</wsse:Username><wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' + pass + '</wsse:Password></wsse:UsernameToken></wsse:Security><mule:header xmlns:mule="http://www.muleumo.org/providers/soap/1.0"><mule:MULE_CORRELATION_ID>328ca67d-a175-11e2-9a6c-e16cb4724a8b</mule:MULE_CORRELATION_ID><mule:MULE_CORRELATION_GROUP_SIZE>-1</mule:MULE_CORRELATION_GROUP_SIZE><mule:MULE_CORRELATION_SEQUENCE>-1</mule:MULE_CORRELATION_SEQUENCE></mule:header></soap:Header> <soap:Body>    <ns2:getPublicStations xmlns:ns2="http://www.example.org/coulombservices/">      <searchQuery> <Proximity>10</Proximity>        <proximityUnit>M</proximityUnit>        <Geo>         <Lat>37.425758</Lat>          <Long>-122.097807</Long>        </Geo>      </searchQuery>    </ns2:getPublicStations> </soap:Body></soap:Envelope>';
+ 
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4) {
+                    if (xmlhttp.status == 200) {
+ 
+                        alert('done use firebug to see responce');
+                    }
+                }
+            }
+            // Send the POST request
+            xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+            xmlhttp.send(sr);
+            // send request
+            // ...
+        }
+    </script>
+</head>
+<body>
+    <form name="Demo" action="" method="post">
+        <div>
+            <input type="button" value="Soap" onclick="soap();" />
+        </div>
+    </form>
+</body>
+<html>
