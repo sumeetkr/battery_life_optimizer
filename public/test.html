@@ -2,9 +2,8 @@
 <head>
     <title>SOAP JavaScript Client Test</title>
     <script type="text/javascript">
-        function soap() {
-	alert('We are here!');
             var xmlhttp = new XMLHttpRequest();
+        function soap() {
             xmlhttp.open('POST', 'https://webservices.chargepoint.com/webservices/chargepoint/services/4.1', true);
  
             user = "b207195d0b1684270db5aeae7970408c5179ce9f5a4dc1366937247";
@@ -27,8 +26,24 @@
             xmlhttp.send(sr);
             // send request
             // ...
-        }
-    </script>
+
+
+
+       }
+
+	function get_response() {
+		var xmlResponse =xmlhttp.responseXML.documentElement;
+
+		var fullNodeList = xmlResponse.getElementsByTagName("loginUserSoapOutPart");
+
+		for (var i=0; i < fullNodeList.length; i++)
+		{
+		  var eachnode = new Option();
+		  eachnode.text = fullNodeList[i].childNodes[0].nodeValue;
+		  eachnode.value = fullNodeList[i].attributes[0].value;
+		}
+	}
+   </script>
 </head>
 <body>
     <form name="Demo" action="" method="post">
@@ -36,5 +51,13 @@
             <input type="button" value="Soap" onclick="soap();" />
         </div>
     </form>
+
+    <form name="Demo2" action="" method="post">
+        <div>
+            <input type="button" value="Response" onclick="get_response();" />
+        </div>
+    </form>
 </body>
 <html>
+
+ 
