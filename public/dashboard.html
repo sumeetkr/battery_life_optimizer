@@ -30,11 +30,11 @@
                 range: true,
                 values: [ 37, 67 ],
                 slide: function( event, ui ) {
-                    $( "#amount" ).val( "%" + ui.values[ 0 ] + " - %" + ui.values[ 1 ] );
+                    $( "#amount" ).val( ui.values[ 0 ] + "%  - " + ui.values[ 1 ] + "%");
                 }
             });
-            $( "#amount" ).val( "%" + $( "#slider-range" ).slider( "values", 0 ) +
-                    " - %" + $( "#slider-range" ).slider( "values", 1 ) );
+            $( "#amount" ).val(  $( "#slider-range" ).slider( "values", 0 ) +"% - " +
+                      + $( "#slider-range" ).slider( "values", 1 ) +  " %" );
         });
     </script>
     <script>
@@ -102,10 +102,11 @@
     <div id="status_window" class ="pull-left">
         <p>
             <label for="amount">Optimized charging goal:</label>
-            <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
+
         </p>
     </div>
-    <div id="battery" class ="pull-right">
+    <div id="battery" class ="pull-right" style="width:110px">
+        <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
         <div id="slider-range" data-show-value="true" style="height: 250px; width:7em; background-image: url('img/battery.png');"></div>
     </div>
 </div>
