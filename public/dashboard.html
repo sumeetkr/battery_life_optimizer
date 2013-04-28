@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         #map_canvas {
             width: 500px;
             height: 400px;
         }
     </style>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="style.css" />
     <script>
         $(function() {
@@ -21,21 +24,67 @@
                     $( "#amount" ).val( "$" + ui.values[ 0 ] + " - %" + ui.values[ 1 ] );
                 }
             });
-            $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-                    " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+            $( "#amount" ).val( "%" + $( "#slider-range" ).slider( "values", 0 ) +
+                    " - %" + $( "#slider-range" ).slider( "values", 1 ) );
         });
     </script>
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script>
-        function initialize() {
-            var map_canvas = document.getElementById('map_canvas');
-            var map_options = {
-                center:new google.maps.LatLng(44.5403, -78.5463),
-                zoom:8,
-                mapTypeId:google.maps.MapTypeId.ROADMAP
+        var google_map;
+        var current_lat = 37.4438053;
+        var current_long = -122.1472063;
+
+        jQuery(document).ready(function ($) {
+
+            initialize_map();
+            var maxResults = 20;
+            var distance_in_miles = 10;
+            // Get the DOM node to which we will append the map
+            var mapContainer = document.getElementById("map_canvas");
+
+
+            var chargingPointmarkers = [];
+
+            var location = new google.maps.LatLng(current_lat, current_long);
+            var current_location_marker = new google.maps.Marker({
+                position: location,
+                map: google_map
+            });
+            get_charging_points(current_lat, current_long, google_map);
+
+
+            function initialize_map() {
+                var map_canvas = document.getElementById('map_canvas');
+                var map_options = {
+                    center:new google.maps.LatLng(current_lat,current_long),
+                    zoom:12,
+                    mapTypeId:google.maps.MapTypeId.ROADMAP
+                }
+                google_map = new google.maps.Map(map_canvas, map_options)
             }
-            var map = new google.maps.Map(map_canvas, map_options)
-        }
+
+            function get_charging_points(current_lat, current_long, google_map) {
+
+                var pinColor = "0000FF";
+                var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+                        new google.maps.Size(21, 34),
+                        new google.maps.Point(0,0),
+                        new google.maps.Point(10, 34));
+
+                $.getJSON("http://openchargemap.org/api/?output=json&action=getchargepoints&latitude=" + current_lat + "&longitude=" + current_long + "&distance=" + distance_in_miles + "&distanceunit=Miles&includecomments=true&maxresults=" + maxResults + "&countryid=2",function () {
+                }).done(function (json) {
+                            $.each(json, function (i, fb) {
+                                var charging_point_location = new google.maps.LatLng(fb.AddressInfo.Latitude, fb.AddressInfo.Longitude);
+                                var current_location_marker = new google.maps.Marker({
+                                    position:charging_point_location,
+                                    map:google_map,
+                                    icon:pinImage
+                                });
+                            });
+                        });
+            }
+//
+        });
     </script>
 </head>
 <body>
@@ -43,9 +92,10 @@
     <p>
         <label for="amount">Optimized charging goal:</label>
         <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
+    <div id="slider-range" class ="pull-right" style="height: 250px; width:5em ;"></div>
     </p>
-    <div id="slider-range" style="height: 250px; width:5em ;"></div>
 </div>
+<hr>
 <div id="charging_points">
     <div>
         Maps with charging points
@@ -53,8 +103,5 @@
     <div id="map_canvas"></div>
 </div>
 
-<script>
-    initialize();
-</script>
 </body>
 </html>
