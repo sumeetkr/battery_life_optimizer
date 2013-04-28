@@ -7,6 +7,17 @@
             width: 500px;
             height: 400px;
         }
+        .ui-widget-content { background: purple; }
+        .ui-widget-content .ui-state-default { background: chartreuse; }
+
+        .ui-slider .ui-slider-horizontal { height: .6em; }
+        .ui-slider .ui-slider-handle {
+            position: absolute;
+            z-index: 2;
+            width: 5.3em !important;
+            height: 1em;
+            cursor: default;
+        }
     </style>
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
@@ -14,6 +25,7 @@
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="style.css" />
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script>
         $(function() {
             $( "#slider-range" ).slider({
@@ -28,7 +40,6 @@
                     " - %" + $( "#slider-range" ).slider( "values", 1 ) );
         });
     </script>
-    <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script>
         var google_map;
         var current_lat = 37.4438053;
@@ -36,9 +47,11 @@
 
         jQuery(document).ready(function ($) {
 
+            $("#slider-range").children("div").css("background","green");
+
             initialize_map();
             var maxResults = 20;
-            var distance_in_miles = 10;
+            var distance_in_miles = 5;
             // Get the DOM node to which we will append the map
             var mapContainer = document.getElementById("map_canvas");
 
@@ -92,7 +105,7 @@
     <p>
         <label for="amount">Optimized charging goal:</label>
         <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
-    <div id="slider-range" class ="pull-right" style="height: 250px; width:5em ;"></div>
+    <div id="slider-range" class ="pull-right" style="height: 250px; width:5em;"></div>
     </p>
 </div>
 <hr>
