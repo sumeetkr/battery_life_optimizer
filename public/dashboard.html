@@ -64,6 +64,13 @@
                 position: location,
                 map: google_map
             });
+            
+            var av_dist_av_cp = 0;	// Average ditance to chargepoint in miles of one profile 
+            var av_dist_trav = 0;	// Average distance travelled with car in miles of one profile
+            var av_consump = 0;		// Average energy consumption in miles/kWh of one profile
+            var opt_bat_low_SOC = 60; 	// Optimal lower limit of battery SOC provided by OEM of car (BMW) in percentage
+            var opt_bat_up_SOC = 65; 	// Optimal upper limit of battery SOC provided by OEM of car (BMW) in percentage
+            
             get_charging_points(current_lat, current_long, google_map);
 
 
@@ -73,7 +80,7 @@
                     center:new google.maps.LatLng(current_lat,current_long),
                     zoom:12,
                     mapTypeId:google.maps.MapTypeId.ROADMAP
-                }
+                
                 google_map = new google.maps.Map(map_canvas, map_options)
             }
 
@@ -96,6 +103,46 @@
                                 });
                             });
                         });
+            }
+
+            }
+
+            //calculate the upper and lower limits of battery charge
+            function calc_bat_SOC_limits() {
+            	
+            	calc_average_dist_av_cp();
+            	calc_av_dist_trav();
+            	calc_av_consump();
+            	
+            	var needed_bat_cap = (av_dist_av_cp + av_dist_trav)/av_consump;	// Needed minimal capazity in kWh of one profile
+            	
+            	// Calculate the battery limits symmetrically to optimal battery SOC window
+            	upper_bat_limit = (opt_bat_low_SOC + opt_bat_low_SOC)/2 + needed_bat_cap/2;
+            	lower_bat_limit = (opt_bat_low_SOC + opt_bat_low_SOC)/2 - needed_bat_cap/2;
+            	
+
+                alert("Calc done!")
+            	
+            }
+                
+            // Calculate the average distance to an available chargepoint
+            function calc_average_dist_av_cp(){
+            	
+            	av_dist_av_cp = 5;
+            	
+            }
+
+            // Calculate the average distance travelled with car in miles of one profile
+            function calc_av_dist_trav(){
+            	
+            	av_dist_trav =40;
+            }
+
+            // Calculate the average energy consumption in miles/kWh of one profile
+            function calc_av_consump(){
+            	
+            	// For our purpose we just use an good estimation
+            	av_consump = 5; // 5 miles per kWh
             }
 //
         });
@@ -126,6 +173,12 @@
     </div>
     <div id="map_canvas"></div>
 </div>
+
+<form name="Demo" action="" method="post">
+    <div>
+        <input type="button" value="Calc" onclick="calc_bat_SOC_limits();"/>
+    </div>
+</form>
 
 </body>
 </html>
