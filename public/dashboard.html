@@ -14,10 +14,11 @@
         .ui-slider .ui-slider-handle {
             position: absolute;
             z-index: 2;
-            width: 5.3em !important;
+            width: 7.3em !important;
             height: 1em;
             cursor: default;
         }
+
     </style>
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
@@ -101,11 +102,21 @@
     </script>
 </head>
 <body>
-<div id="slider-range" class ="pull-right" style="height: 250px; width:5em;"></div>
-<div id="status_window" class ="pull-left">
+<!--background-image: url('img/battery.png');-->
+<!--<div id="slider-" class ="pull-right" style="height: 250px; width:8em;"></div>-->
+
+<!--<div id="status_window" class ="pull-left">-->
+    <!--<p>-->
+        <!--<label for="amount">Optimized charging goal:</label>-->
+        <!--<input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />-->
+    <!--</p>-->
+<!--</div>-->
+<div id="status_window">
+    <div id="slider-range" class ="pull-right" style="height: 250px; width:7em; background-image: url('img/battery.png');"></div>
     <p>
         <label for="amount">Optimized charging goal:</label>
         <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
+
     </p>
 </div>
 <hr>
