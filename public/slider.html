@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery UI Slider - Vertical range slider</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script>
+        $(function() {
+            $( "#slider-range" ).slider({
+                orientation: "vertical",
+                range: true,
+                values: [ 17, 67 ],
+                slide: function( event, ui ) {
+                    $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+                }
+            });
+            $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+                    " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+        });
+    </script>
+</head>
+<body>
+<p>
+    <label for="amount">Target sales goal (Millions):</label>
+    <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
+</p>
+<div id="slider-range" style="height: 250px; width:5em ;"></div>
+</body>
+</html>

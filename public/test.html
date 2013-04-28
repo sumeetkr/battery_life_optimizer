@@ -1,22 +1,27 @@
 <html>
 <head>
     <title>SOAP JavaScript Client Test</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css"/>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script type="text/javascript">
-            var xmlhttp = new XMLHttpRequest();
+        var xmlhttp = new XMLHttpRequest();
         function soap() {
             xmlhttp.open('POST', 'https://webservices.chargepoint.com/webservices/chargepoint/services/4.1', true);
- 
+
             user = "b207195d0b1684270db5aeae7970408c5179ce9f5a4dc1366937247";
             pass = "d1cfc4704ae36aa87f732993daa5d983";
 
- 
+
             // build SOAP request
-            var sr = '<?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Header><wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" soap:mustUnderstand="1"><wsse:UsernameToken xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="UsernameToken-261"><wsse:Username>' + user + '</wsse:Username><wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' + pass + '</wsse:Password></wsse:UsernameToken></wsse:Security><mule:header xmlns:mule="http://www.muleumo.org/providers/soap/1.0"><mule:MULE_CORRELATION_ID>328ca67d-a175-11e2-9a6c-e16cb4724a8b</mule:MULE_CORRELATION_ID><mule:MULE_CORRELATION_GROUP_SIZE>-1</mule:MULE_CORRELATION_GROUP_SIZE><mule:MULE_CORRELATION_SEQUENCE>-1</mule:MULE_CORRELATION_SEQUENCE></mule:header></soap:Header> <soap:Body>    <ns2:getPublicStations xmlns:ns2="http://www.example.org/coulombservices/">      <searchQuery> <Proximity>10</Proximity>        <proximityUnit>M</proximityUnit>        <Geo>         <Lat>37.425758</Lat>          <Long>-122.097807</Long>        </Geo>      </searchQuery>    </ns2:getPublicStations> </soap:Body></soap:Envelope>';
- 
+            var sr = '<?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+                    '<soap:Header><wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" soap:mustUnderstand="1">' +
+                    '<wsse:UsernameToken xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="UsernameToken-261">' +
+                    '<wsse:Username>' + user + '</wsse:Username><wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' + pass + '</wsse:Password></wsse:UsernameToken></wsse:Security><mule:header xmlns:mule="http://www.muleumo.org/providers/soap/1.0"><mule:MULE_CORRELATION_ID>328ca67d-a175-11e2-9a6c-e16cb4724a8b</mule:MULE_CORRELATION_ID><mule:MULE_CORRELATION_GROUP_SIZE>-1</mule:MULE_CORRELATION_GROUP_SIZE><mule:MULE_CORRELATION_SEQUENCE>-1</mule:MULE_CORRELATION_SEQUENCE></mule:header></soap:Header> <soap:Body>    <ns2:getPublicStations xmlns:ns2="http://www.example.org/coulombservices/">      <searchQuery> <Proximity>10</Proximity>        <proximityUnit>M</proximityUnit>        <Geo>         <Lat>37.425758</Lat>          <Long>-122.097807</Long>        </Geo>      </searchQuery>    </ns2:getPublicStations> </soap:Body></soap:Envelope>';
+
             xmlhttp.onreadystatechange = function () {
                 if (xmlhttp.readyState == 4) {
                     if (xmlhttp.status == 200) {
- 
+
                         alert('done use firebug to see responce');
                     }
                 }
@@ -28,35 +33,64 @@
             // ...
 
 
+        }
 
-       }
+        function get_response() {
+            var xmlResponse = xmlhttp.responseXML.documentElement;
 
-	function get_response() {
-		var xmlResponse =xmlhttp.responseXML.documentElement;
+            var fullNodeList = xmlResponse.getElementsByTagName("loginUserSoapOutPart");
 
-		var fullNodeList = xmlResponse.getElementsByTagName("loginUserSoapOutPart");
+            for (var i = 0; i < fullNodeList.length; i++) {
+                var eachnode = new Option();
+                eachnode.text = fullNodeList[i].childNodes[0].nodeValue;
+                eachnode.value = fullNodeList[i].attributes[0].value;
+            }
+        }
 
-		for (var i=0; i < fullNodeList.length; i++)
-		{
-		  var eachnode = new Option();
-		  eachnode.text = fullNodeList[i].childNodes[0].nodeValue;
-		  eachnode.value = fullNodeList[i].attributes[0].value;
-		}
-	}
-   </script>
+        function get_charging_points() {
+            // Assign handlers immediately after making the request,
+            // and remember the jqxhr object for this request
+
+            var user = "b207195d0b1684270db5aeae7970408c5179ce9f5a4dc1366937247";
+            var pass = "d1cfc4704ae36aa87f732993daa5d983";
+
+
+            // build SOAP request
+            var soap_request = '<?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Header><wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" soap:mustUnderstand="1"><wsse:UsernameToken xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="UsernameToken-261"><wsse:Username>' + user + '</wsse:Username><wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' + pass + '</wsse:Password></wsse:UsernameToken></wsse:Security><mule:header xmlns:mule="http://www.muleumo.org/providers/soap/1.0"><mule:MULE_CORRELATION_ID>328ca67d-a175-11e2-9a6c-e16cb4724a8b</mule:MULE_CORRELATION_ID><mule:MULE_CORRELATION_GROUP_SIZE>-1</mule:MULE_CORRELATION_GROUP_SIZE><mule:MULE_CORRELATION_SEQUENCE>-1</mule:MULE_CORRELATION_SEQUENCE></mule:header></soap:Header> <soap:Body>    <ns2:getPublicStations xmlns:ns2="http://www.example.org/coulombservices/">      <searchQuery> <Proximity>10</Proximity>        <proximityUnit>M</proximityUnit>        <Geo>         <Lat>37.425758</Lat>          <Long>-122.097807</Long>        </Geo>      </searchQuery>    </ns2:getPublicStations> </soap:Body></soap:Envelope>';
+
+
+            $.ajax({
+                type: "post",
+                url: "https://webservices.chargepoint.com/webservices/chargepoint/services/4.1",
+                contentType: "text/xml",
+                data: soap_request,
+                dataType: "xml",
+                processData: false,
+                success: function( response ){
+                    var xml = $( response );
+                    alert("success")
+
+                },
+                error: function(){
+                    alert("failure")
+                }
+            });
+
+        }
+    </script>
 </head>
 <body>
-    <form name="Demo" action="" method="post">
-        <div>
-            <input type="button" value="Soap" onclick="soap();" />
-        </div>
-    </form>
+<form name="Demo" action="" method="post">
+    <div>
+        <input type="button" value="Get Charging Points" onclick="get_charging_points();"/>
+    </div>
+</form>
 
-    <form name="Demo2" action="" method="post">
-        <div>
-            <input type="button" value="Response" onclick="get_response();" />
-        </div>
-    </form>
+<form name="Demo2" action="" method="post">
+    <div>
+        <input type="button" value="Response" onclick="get_response();"/>
+    </div>
+</form>
 </body>
 <html>
 

@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Battery web api</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="battery.js"></script>
+    <!--<link rel='stylesheet' type='text/css' href='css/battery.css'>-->
+</head>
+<body>
+
+<div id="status_window">
+    <div id="box">
+        <div id="battery"></div>
+        <div id="text">
+        <span style="display: block;margin-bottom:15px;font-size: xx-large;"><strong>Battery
+            specifications</strong></span>
+            <span style="display: block" id="level">Battery level: unknown</span>
+            <span style="display: block" id="status">Charging status: unknown</span>
+            <span style="display: block" id="charged">Battery charged: unknown</span>
+        </div>
+    </div>
+</div>
+<div id="charging_points">
+    <ul class="nav nav-tabs">
+        <li><a href="#home" data-toggle="tab">Home</a></li>
+        <li><a href="#profile" data-toggle="tab">Profile</a></li>
+        <li><a href="#messages" data-toggle="tab">Messages</a></li>
+        <li><a href="#settings" data-toggle="tab">Settings</a></li>
+    </ul>
+</div>
+</body>
+</html>
