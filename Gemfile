@@ -5,8 +5,6 @@ gem 'rails', '3.2.13'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-#gem 'sqlite3'
-
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -36,3 +34,39 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
+
+
+group :development, :test do
+  gem 'sqlite3', '1.3.5'
+
+  #Used to annotate models with the database schema
+  gem 'annotate'
+
+  #Gems for testing
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'spork-rails'
+  gem 'guard-rspec'
+  gem 'guard-spork'
+
+  #Guard dependencies
+  gem 'rb-fsevent'
+  gem 'growl'
+  gem 'rails-erd'
+end
+
+group :test do
+  #Integration
+  gem 'capybara'
+  # So that capybara can launch a browser
+  gem 'launchy'
+
+  #Code coverage
+  gem 'simplecov'
+
+  gem 'database_cleaner'
+end
+
+group :production do
+  gem 'pg', '0.12.2'
+end
