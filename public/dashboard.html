@@ -55,29 +55,20 @@
     <link rel="stylesheet" href="style.css"/>
     <script src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
     <script>
-        $(function () {
-            $("#slider-range").slider({
-                orientation:"vertical",
-                range:true,
-                values:[ 37, 67 ],
-                slide:function (event, ui) {
-                    $("#min-range-val").val(ui.values[ 0 ] + "%");
-                    $("#max-range-val").val(ui.values[ 1 ] + "%");
-                }
-            });
-            $("#min-range-val").val($("#slider-range").slider("values", 0) + "%");
-            $("#max-range-val").val($("#slider-range").slider("values", 1) + " %");
-        });
-    </script>
-    <script>
         var google_map;
         var current_lat = 37.4438053;
         var current_long = -122.1472063;
+        var av_dist_av_cp = 0;	// Average ditance to chargepoint in miles of one profile
+        var av_dist_trav = 0;	// Average distance travelled with car in miles of one profile
+        var av_consump = 0;		// Average energy consumption in miles/kWh of one profile
+        var opt_bat_low_SOC = 60; 	// Optimal lower limit of battery SOC provided by OEM of car (BMW) in percentage
+        var opt_bat_up_SOC = 65; 	// Optimal upper limit of battery SOC provided by OEM of car (BMW) in percentage
+        var upper_bat_limit = 100;
+        var lower_bat_limit =0;
+
 
         jQuery(document).ready(function ($) {
 
-            $("#slider-range").children("div").css("background", "green");
-            $("#slider-range").children("div").css("opacity", "0.5");
             initialize_map();
 
             var location = new google.maps.LatLng(current_lat, current_long);
@@ -116,7 +107,7 @@
                 var maxResults = 20;
                 var distance_in_miles = 5;
 
-                var pinColor = "0000FF";
+                var pinColor = "00FF00";
                 var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
                         new google.maps.Size(21, 34),
                         new google.maps.Point(0, 0),
@@ -132,49 +123,63 @@
                                     icon:pinImage
                                 });
                             });
-                        });
-            }
 
+                            calc_bat_SOC_limits();
+                            initialize_battery_range();
+                        });
             }
 
             //calculate the upper and lower limits of battery charge
             function calc_bat_SOC_limits() {
-            	
-            	calc_average_dist_av_cp();
-            	calc_av_dist_trav();
-            	calc_av_consump();
-            	
-            	var needed_bat_cap = (av_dist_av_cp + av_dist_trav)/av_consump;	// Needed minimal capazity in kWh of one profile
-            	
-            	// Calculate the battery limits symmetrically to optimal battery SOC window
-            	upper_bat_limit = (opt_bat_low_SOC + opt_bat_low_SOC)/2 + needed_bat_cap/2;
-            	lower_bat_limit = (opt_bat_low_SOC + opt_bat_low_SOC)/2 - needed_bat_cap/2;
-            	
 
-                alert("Calc done!")
-            	
+                calc_average_dist_av_cp();
+                calc_av_dist_trav();
+                calc_av_consump();
+
+                var needed_bat_cap = (av_dist_av_cp + av_dist_trav)/av_consump;	// Needed minimal capazity in kWh of one profile
+
+                // Calculate the battery limits symmetrically to optimal battery SOC window
+                upper_bat_limit = (opt_bat_low_SOC + opt_bat_low_SOC)/2 + needed_bat_cap/2;
+                lower_bat_limit = (opt_bat_low_SOC + opt_bat_low_SOC)/2 - needed_bat_cap/2;
+
             }
-                
+
             // Calculate the average distance to an available chargepoint
             function calc_average_dist_av_cp(){
-            	
-            	av_dist_av_cp = 5;
-            	
+
+                av_dist_av_cp = 5;
+
             }
 
             // Calculate the average distance travelled with car in miles of one profile
             function calc_av_dist_trav(){
-            	
-            	av_dist_trav =40;
+
+                av_dist_trav =80;
             }
 
             // Calculate the average energy consumption in miles/kWh of one profile
             function calc_av_consump(){
-            	
-            	// For our purpose we just use an good estimation
-            	av_consump = 5; // 5 miles per kWh
+
+                // For our purpose we just use an good estimation
+                av_consump = 5; // 5 miles per kWh
             }
-//
+
+            function initialize_battery_range() {
+                $("#slider-range").slider({
+                    orientation:"vertical",
+                    range:true,
+                    values:[ lower_bat_limit, upper_bat_limit ],
+                    slide:function (event, ui) {
+                        $("#min-range-val").val(ui.values[ 0 ] + "%");
+                        $("#max-range-val").val(ui.values[ 1 ] + "%");
+                    }
+                });
+                $("#min-range-val").val($("#slider-range").slider("values", 0) + "%");
+                $("#max-range-val").val($("#slider-range").slider("values", 1) + " %");
+
+                $("#slider-range").children("div").css("background", "green");
+                $("#slider-range").children("div").css("opacity", "0.5");
+            }
         });
     </script>
 </head>
@@ -221,7 +226,7 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>40 miles</td>
+                        <td>80 miles</td>
                     </tr>
                     </tbody>
                 </table>
