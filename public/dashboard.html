@@ -32,6 +32,20 @@
             font-size: 22px;
         }
 
+        #max-range-val {
+            color: #00ffff;
+            font-size: 22px;
+            background-color: #000000;
+            border: 0;
+        }
+
+        #min-range-val {
+            color: #00ffff;
+            font-size: 22px;
+            background-color: #000000;
+            border: 0
+        }
+
     </style>
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css"/>
@@ -47,11 +61,12 @@
                 range:true,
                 values:[ 37, 67 ],
                 slide:function (event, ui) {
-                    $("#amount").val(ui.values[ 0 ] + "%  - " + ui.values[ 1 ] + "%");
+                    $("#min-range-val").val(ui.values[ 0 ] + "%");
+                    $("#max-range-val").val(ui.values[ 1 ] + "%");
                 }
             });
-            $("#amount").val($("#slider-range").slider("values", 0) + "% - " +
-                    +$("#slider-range").slider("values", 1) + " %");
+            $("#min-range-val").val($("#slider-range").slider("values", 0) + "%");
+            $("#max-range-val").val($("#slider-range").slider("values", 1) + " %");
         });
     </script>
     <script>
@@ -176,7 +191,9 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>70 %</td>
+                        <td>
+                           <input type="label" id="max-range-val"/>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -189,7 +206,9 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>40 %</td>
+                        <td >
+                            <input type="label" id="min-range-val"/>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -209,9 +228,7 @@
             </div>
         </div>
         <div class="span1">
-            <div id="battery" class="pull-right" style="width:110px">
-                <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;"/>
-
+            <div id="battery" class="pull-right" style="width:110px;">
                 <div id="slider-range" data-show-value="true"
                      style="height: 250px; width:7em; background-image: url('img/battery.png');"></div>
             </div>
