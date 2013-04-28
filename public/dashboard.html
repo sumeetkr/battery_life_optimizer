@@ -55,21 +55,6 @@
     <link rel="stylesheet" href="style.css"/>
     <script src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
     <script>
-        $(function () {
-            $("#slider-range").slider({
-                orientation:"vertical",
-                range:true,
-                values:[ 37, 67 ],
-                slide:function (event, ui) {
-                    $("#min-range-val").val(ui.values[ 0 ] + "%");
-                    $("#max-range-val").val(ui.values[ 1 ] + "%");
-                }
-            });
-            $("#min-range-val").val($("#slider-range").slider("values", 0) + "%");
-            $("#max-range-val").val($("#slider-range").slider("values", 1) + " %");
-        });
-    </script>
-    <script>
         var google_map;
         var current_lat = 37.4438053;
         var current_long = -122.1472063;
@@ -84,8 +69,6 @@
 
         jQuery(document).ready(function ($) {
 
-            $("#slider-range").children("div").css("background", "green");
-            $("#slider-range").children("div").css("opacity", "0.5");
             initialize_map();
 
             get_charging_points(current_lat, current_long, google_map);
@@ -128,6 +111,9 @@
                                     icon:pinImage
                                 });
                             });
+
+                            calc_bat_SOC_limits();
+                            initialize_battery_range();
                         });
             }
 
@@ -144,9 +130,6 @@
                 upper_bat_limit = (opt_bat_low_SOC + opt_bat_low_SOC)/2 + needed_bat_cap/2;
                 lower_bat_limit = (opt_bat_low_SOC + opt_bat_low_SOC)/2 - needed_bat_cap/2;
 
-
-                alert("Calc done!")
-
             }
 
             // Calculate the average distance to an available chargepoint
@@ -159,7 +142,7 @@
             // Calculate the average distance travelled with car in miles of one profile
             function calc_av_dist_trav(){
 
-                av_dist_trav =40;
+                av_dist_trav =80;
             }
 
             // Calculate the average energy consumption in miles/kWh of one profile
@@ -167,6 +150,23 @@
 
                 // For our purpose we just use an good estimation
                 av_consump = 5; // 5 miles per kWh
+            }
+
+            function initialize_battery_range() {
+                $("#slider-range").slider({
+                    orientation:"vertical",
+                    range:true,
+                    values:[ lower_bat_limit, upper_bat_limit ],
+                    slide:function (event, ui) {
+                        $("#min-range-val").val(ui.values[ 0 ] + "%");
+                        $("#max-range-val").val(ui.values[ 1 ] + "%");
+                    }
+                });
+                $("#min-range-val").val($("#slider-range").slider("values", 0) + "%");
+                $("#max-range-val").val($("#slider-range").slider("values", 1) + " %");
+
+                $("#slider-range").children("div").css("background", "green");
+                $("#slider-range").children("div").css("opacity", "0.5");
             }
         });
     </script>
@@ -214,7 +214,7 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>40 miles</td>
+                        <td>80 miles</td>
                     </tr>
                     </tbody>
                 </table>
