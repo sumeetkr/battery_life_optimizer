@@ -7,18 +7,14 @@
             width: 100%;
             height: 400px;
         }
-        .ui-widget-content { background: purple; }
-        .ui-widget-content .ui-state-default { background: chartreuse; }
-
-        .ui-slider .ui-slider-horizontal { height: .6em; }
         .ui-slider .ui-slider-handle {
             position: absolute;
-            z-index: 2;
+            z-index: -1;
             width: 7.3em !important;
             height: 1em;
             cursor: default;
+            opacity:0.5;
         }
-
     </style>
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
@@ -26,7 +22,7 @@
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="style.css" />
-    <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
     <script>
         $(function() {
             $( "#slider-range" ).slider({
@@ -34,7 +30,7 @@
                 range: true,
                 values: [ 37, 67 ],
                 slide: function( event, ui ) {
-                    $( "#amount" ).val( "$" + ui.values[ 0 ] + " - %" + ui.values[ 1 ] );
+                    $( "#amount" ).val( "%" + ui.values[ 0 ] + " - %" + ui.values[ 1 ] );
                 }
             });
             $( "#amount" ).val( "%" + $( "#slider-range" ).slider( "values", 0 ) +
@@ -49,7 +45,7 @@
         jQuery(document).ready(function ($) {
 
             $("#slider-range").children("div").css("background","green");
-
+            $("#slider-range").children("div").css("opacity","0.5");
             initialize_map();
             var maxResults = 20;
             var distance_in_miles = 5;
@@ -101,29 +97,22 @@
         });
     </script>
 </head>
-<body>
-<!--background-image: url('img/battery.png');-->
-<!--<div id="slider-" class ="pull-right" style="height: 250px; width:8em;"></div>-->
-
-<!--<div id="status_window" class ="pull-left">-->
-    <!--<p>-->
-        <!--<label for="amount">Optimized charging goal:</label>-->
-        <!--<input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />-->
-    <!--</p>-->
-<!--</div>-->
-<div id="status_window">
-    <div id="slider-range" class ="pull-right" style="height: 250px; width:7em; background-image: url('img/battery.png');"></div>
-    <p>
-        <label for="amount">Optimized charging goal:</label>
-        <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
-
-    </p>
-</div>
-<hr>
-<div id="charging_points">
-    <div>
-        Maps with charging points
+<body  style="background-color:#000000;">
+<div>
+    <div id="status_window" class ="pull-left">
+        <p>
+            <label for="amount">Optimized charging goal:</label>
+            <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
+        </p>
     </div>
+    <div id="battery" class ="pull-right">
+        <div id="slider-range" data-show-value="true" style="height: 250px; width:7em; background-image: url('img/battery.png');"></div>
+    </div>
+</div>
+<div id="charging_points">
+    <p>
+        Maps with charging points
+    </p>
     <div id="map_canvas"></div>
 </div>
 
